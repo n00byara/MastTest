@@ -59,16 +59,16 @@ public class SettingsActivity extends AppCompatActivity {
                     call.enqueue(new Callback<Quotes>() {
                         @Override
                         public void onResponse(Call<Quotes> call, Response<Quotes> response) {
-                            setCheckText(true);
+                            setCheckText(true, "подключение установлено");
                         }
 
                         @Override
                         public void onFailure(Call<Quotes> call, Throwable t) {
-                            setCheckText(false);
+                            setCheckText(false, "подключение не установлено");
                         }
                     });
                 } else {
-                    setCheckText(false);
+                    setCheckText(false, "подключение не установлено. \nприложение обрабатывает запросы только с https://dummyjson.com/");
                 }
             }
         });
@@ -76,13 +76,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    private void setCheckText(Boolean check) {
+    private void setCheckText(Boolean check, String text) {
         TextView checkText = findViewById(R.id.chech_connect);
 
         if (check) {
-            checkText.setText("подключение установлено");
+            checkText.setText(text);
         } else {
-            checkText.setText("подключение не установлено");
+            checkText.setText(text);
         }
     }
 
