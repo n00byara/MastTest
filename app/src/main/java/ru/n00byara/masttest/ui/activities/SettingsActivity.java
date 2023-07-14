@@ -38,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         getUrl();
         Button button = findViewById(R.id.save_btn);
+        setNavBar();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        setNavBar();
+
     }
 
     private void setCheckText(Boolean check) {
