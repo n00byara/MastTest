@@ -3,6 +3,8 @@ package ru.n00byara.masttest.ui.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,10 +12,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.n00byara.masttest.R;
+import ru.n00byara.masttest.components.clientapi.APIClient;
+import ru.n00byara.masttest.components.clientapi.pojo.Quotes;
+import ru.n00byara.masttest.components.clientapi.routers.Routers;
+import ru.n00byara.masttest.ui.adapters.comments.QuotesAdapter;
 
 public class SettingsActivity extends AppCompatActivity {
     SharedPreferences settings;
@@ -31,7 +44,45 @@ public class SettingsActivity extends AppCompatActivity {
                 saveUrl();
             }
         });
+
+        Button btn = findViewById(R.id.chech_connect_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = getUrl();
+
+                if (url.equals("https://dummyjson.com/")) {
+                    Routers apiInterface = APIClient.getClient(url).create(Routers.class);
+                    Call<Quotes> call = apiInterface.getQuotes();
+
+                    call.enqueue(new Callback<Quotes>() {
+                        @Override
+                        public void onResponse(Call<Quotes> call, Response<Quotes> response) {
+                            setCheckText(true);
+                        }
+
+                        @Override
+                        public void onFailure(Call<Quotes> call, Throwable t) {
+                            setCheckText(false);
+                        }
+                    });
+                } else {
+                    setCheckText(false);
+                }
+            }
+        });
+
         setNavBar();
+    }
+
+    private void setCheckText(Boolean check) {
+        TextView checkText = findViewById(R.id.chech_connect);
+
+        if (check) {
+            checkText.setText("подключение установлено");
+        } else {
+            checkText.setText("подключение не установлено");
+        }
     }
 
     private void saveUrl() {
@@ -45,12 +96,13 @@ public class SettingsActivity extends AppCompatActivity {
         edit.apply();
     }
 
-    private void getUrl() {
+    private String getUrl() {
         settings = getSharedPreferences(PREFS_URL, MODE_PRIVATE);
         String url = settings.getString(PREFS_URL, "");
 
         EditText editText = findViewById(R.id.url_set);
         editText.setText(url);
+        return url;
     }
     private boolean setNavBar() {
         DrawerLayout drawerLayout = findViewById(R.id.settings_drawer_layout_id);
