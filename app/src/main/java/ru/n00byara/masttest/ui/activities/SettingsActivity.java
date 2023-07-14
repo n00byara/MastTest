@@ -68,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    setCheckText(false, "подключение не установлено. \nприложение обрабатывает запросы только с https://dummyjson.com/");
+                    setCheckText(false, "подключение не установлено. \nприложение обрабаты  вает запросы только с https://dummyjson.com/");
                 }
             }
         });

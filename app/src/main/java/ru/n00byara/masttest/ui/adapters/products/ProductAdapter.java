@@ -39,8 +39,11 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
 
         holder.title.setText(product.title);
         holder.price.setText("price: " + product.price);
-        holder.thumbnail.setText(product.thumbnail);
         holder.description.setText(product.description);
+
+        if (!product.thumbnail.equals("")) {
+            Picasso.get().load(product.thumbnail).into(holder.thumbnail);
+        }
 
         if (product.images.size() != 0) {
             String image = getImageUrl(product.images);
@@ -53,7 +56,9 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
                 if (holder.description.getVisibility() == View.GONE) {
                     holder.image.setVisibility(View.VISIBLE);
                     holder.description.setVisibility(View.VISIBLE);
+                    holder.thumbnail.setVisibility(View.GONE);
                 } else {
+                    holder.thumbnail.setVisibility(View.VISIBLE);
                     holder.image.setVisibility(View.GONE);
                     holder.description.setVisibility(View.GONE);
                 }
@@ -71,7 +76,7 @@ public class ProductAdapter extends  RecyclerView.Adapter<ProductAdapter.ViewHol
         final TextView price;
         final TextView description;
         final ImageView image;
-        final TextView thumbnail;
+        final ImageView thumbnail;
         final CardView cardView;
 
         public ViewHolder(@NonNull View view) {
